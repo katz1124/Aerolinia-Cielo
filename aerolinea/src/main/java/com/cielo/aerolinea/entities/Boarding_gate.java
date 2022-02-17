@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class Boarding_gate {
     @Id
     @Column(name = "id_boarding_gate", nullable = false)
-    private Long idBoardingGate;
+    private int idBoardingGate;
 
     private String gate;
 

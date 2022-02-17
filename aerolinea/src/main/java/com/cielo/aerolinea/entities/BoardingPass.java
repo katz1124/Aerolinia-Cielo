@@ -10,11 +10,11 @@ import javax.persistence.*;
 public class BoardingPass {
     @Id
     @Column(name = "id_boarding_pass", nullable = false)
-    private Long idBoardingPass;
+    private int idBoardingPass;
 
     @JoinColumn(name = "id_seat")
     @OneToOne
-    private Asiento asiento;
+    private Seat seat;
 
     @JoinColumn(name = "id_reservation")
     @OneToOne

@@ -11,7 +11,7 @@ import java.util.Date;
 public class Flight {
     @Id
     @Column(name = "id_flight", nullable = false)
-    private Long idFlight;
+    private int idFlight;
 
     private String origin;
     private String destiny;
