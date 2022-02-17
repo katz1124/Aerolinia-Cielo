@@ -9,12 +9,12 @@ import javax.persistence.Table;
 
 @Entity
 @Data
-@Table(name = "gate")
-public class Gate {
+@Table(name = "boarding_gate")
+public class Boarding_gate {
     @Id
-    @Column(name = "id_gate", nullable = false)
-    private Long idGate;
+    @Column(name = "id_boarding_gate", nullable = false)
+    private Long idBoardingGate;
 
-    private String sala;
+    private String gate;
 
 }

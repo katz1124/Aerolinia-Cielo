@@ -12,13 +12,13 @@ public class BoardingPass {
     @Column(name = "id_boarding_pass", nullable = false)
     private Long idBoardingPass;
 
-    @JoinColumn(name = "id_asiento")
+    @JoinColumn(name = "id_seat")
     @OneToOne
     private Asiento asiento;
 
-    @JoinColumn(name = "id_reserva")
+    @JoinColumn(name = "id_reservation")
     @OneToOne
-    private Reserva reserva;
+    private Reservation reservation;
 
 
 }
