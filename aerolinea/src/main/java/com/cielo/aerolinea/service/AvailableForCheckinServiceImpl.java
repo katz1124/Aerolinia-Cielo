@@ -5,11 +5,13 @@ import com.cielo.aerolinea.dao.ReservationDao;
 import com.cielo.aerolinea.entities.Flight;
 import com.cielo.aerolinea.entities.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+@Service
 public class AvailableForCheckinServiceImpl implements AvailableForCheckinService {
     @Autowired
     ReservationDao reservationDao;
@@ -20,16 +22,21 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     //If null, not available
     @Override
     public Reservation validateWithCode(String name, String reservationCode) {
+
         int id = GetId(reservationCode);
         Reservation reservation = reservationDao.findById(id).orElse(null);
         if (reservation == null) {
+
             return null;
         }
+
         if (reservation.getPassenger().getName().equals(name)) {
+            System.out.println("asd------0000000000000000----------");
             if(checkAvailability(reservation)){
+
                 return reservation;
             }
-
+            System.out.println("falla2");
         }
 
         return null;

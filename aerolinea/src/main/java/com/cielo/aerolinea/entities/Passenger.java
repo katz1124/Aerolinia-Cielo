@@ -2,10 +2,8 @@ package com.cielo.aerolinea.entities;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -20,4 +18,6 @@ public class Passenger {
     @Column(name = "last_name")
     private String lastName;
     private String email;
+    @Temporal(value = TemporalType.DATE)
+    private Date date;
 }
