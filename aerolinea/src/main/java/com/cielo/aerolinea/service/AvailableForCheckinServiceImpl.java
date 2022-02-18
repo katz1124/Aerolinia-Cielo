@@ -25,7 +25,7 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
         if (reservation == null) {
             return null;
         }
-        if (reservation.getPassenger().getName().equals(name)) {
+        if (reservation.equals(name)) {
             if(checkAvailability(reservation)){
                 return reservation;
             }
