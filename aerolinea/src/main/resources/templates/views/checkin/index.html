@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,17 +12,19 @@
 <body>
     <div class="container mt-3" style="padding-top: 3rem;">
         <div class="card" style="margin:0 auto;width: 30rem; min-height: 25rem;background: rgba(255,255,255,0.9); text-align: center;">
-            <h5 class="card-title mt-3">Consultar vuelo</h5>
-            <div class="card-body" style="width: 70%; margin: 0 auto;">
-                <label class="m-2" for="">Apellido</label>
-                <input class="form-control" type="text" name="" id="">
-                <label class="m-2" for="">Numero de vuelo</label>
-                <input class="form-control mt-1" type="number" name="" id="">
-                <div class="mt-4 d-block">
-                    <button class="btn btn-primary btn-lg ">Consultar</button>
-                    <a href="#" class="link-primary text-decoration-none d-block m-5">¿Ya tiengo Cuenta?</a>
+            <form th:action="@{/guardar}" method="post" th:object="${persona}">
+                <h5 class="card-title mt-3">Consultar vuelo</h5>
+                <div class="card-body" style="width: 70%; margin: 0 auto;">
+                    <label class="m-2" for="">Apellido</label>
+                    <input class="form-control" type="text" name="" id="">
+                    <label class="m-2" for="">Numero de vuelo</label>
+                    <input class="form-control mt-1" type="text" name="" id="">
+                    <div class="mt-4 d-block">
+                        <button class="btn btn-primary btn-lg ">Consultar</button>
+                        <a href="#" class="link-primary text-decoration-none d-block m-5">¿Ya tiengo Cuenta?</a>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </body>
