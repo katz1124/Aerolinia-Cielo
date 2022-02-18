@@ -2,14 +2,18 @@ package com.cielo.aerolinea.service;
 
 import com.cielo.aerolinea.dao.FlightDao;
 import com.cielo.aerolinea.dao.ReservationDao;
+import com.cielo.aerolinea.dao.SeatDao;
 import com.cielo.aerolinea.entities.Flight;
+import com.cielo.aerolinea.entities.Passenger;
 import com.cielo.aerolinea.entities.Reservation;
+import com.cielo.aerolinea.entities.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 @Service
 public class AvailableForCheckinServiceImpl implements AvailableForCheckinService {
@@ -17,6 +21,8 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     ReservationDao reservationDao;
     @Autowired
     FlightDao flightDao;
+    @Autowired
+    SeatDao seatDao;
 
     //Input validation.
     //If null, not available
@@ -72,7 +78,27 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
             return false;
         return true;
     }
+    @Override
+    public String getFlightCode(Reservation reservation) {
+        Flight flight=reservation.getFlight();
+        int flightid=3580+ flight.getIdFlight();
+        String flightCode="FL-"+flightid;
+        return flightCode;
+    }
 
+    @Override
+    public String getPassengerName(Reservation reservation) {
+        Passenger passenger=reservation.getPassenger();
+        String passengerName=passenger.getName()+" "+passenger.getLastName();
+        return passengerName;
+    }
+
+
+    @Override
+    public List<Seat> getSeatsList(int idFlight) {
+        Flight flight=flightDao.getById(idFlight);
+        return seatDao.findByFlight(flight);
+    }
 
 
 }

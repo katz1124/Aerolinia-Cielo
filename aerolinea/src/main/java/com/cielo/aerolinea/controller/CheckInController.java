@@ -2,6 +2,7 @@ package com.cielo.aerolinea.controller;
 
 import com.cielo.aerolinea.entities.BoardingPass;
 import com.cielo.aerolinea.entities.Reservation;
+import com.cielo.aerolinea.entities.Seat;
 import com.cielo.aerolinea.service.AvailableForCheckinService;
 import com.cielo.aerolinea.service.SeatSelectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping
@@ -44,20 +46,31 @@ public class CheckInController {
 
     }
     */
-    @ResponseBody
+
     @GetMapping(value = "/checkin2/{name}/{code}")
-    public Reservation checkin2(@PathVariable("name")String name,@PathVariable("code")String code) {
+    public String checkin2(@PathVariable("name")String name,@PathVariable("code")String code,Model model) {
         Reservation reservation=availableForCheckinService.validateWithCode(name,code);
         if(reservation==null){
             return null;
         }
-        else{
-            return reservation;
-        }
+        int flightId=reservation.getFlight().getIdFlight();
+        int reservationId=reservation.getIdReservation();
+        String passenger= availableForCheckinService.getPassengerName(reservation);
+        String flight= availableForCheckinService.getFlightCode(reservation);
+        List<Seat> seats=availableForCheckinService.getSeatsList(flightId);
+
+        model.addAttribute("passenger",passenger);
+        model.addAttribute("flight",flight);
+        model.addAttribute("seats",seats);
+        model.addAttribute("reservationid",reservationId);
+
+        return "views/planeroom/planeroom";
+
 
     }
     @GetMapping(value = "/checkin/boardingpass")
     public BoardingPass boardingpass() {
+
         return seatSelectionService.generateBoardingPass(1,2,"B");
     }
 }

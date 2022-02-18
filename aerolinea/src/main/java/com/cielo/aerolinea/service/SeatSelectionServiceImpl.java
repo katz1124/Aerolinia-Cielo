@@ -4,10 +4,7 @@ import com.cielo.aerolinea.dao.BoardingPassDao;
 import com.cielo.aerolinea.dao.FlightDao;
 import com.cielo.aerolinea.dao.ReservationDao;
 import com.cielo.aerolinea.dao.SeatDao;
-import com.cielo.aerolinea.entities.BoardingPass;
-import com.cielo.aerolinea.entities.Flight;
-import com.cielo.aerolinea.entities.Reservation;
-import com.cielo.aerolinea.entities.Seat;
+import com.cielo.aerolinea.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,11 +63,7 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
         return boardingPassDao.findByReservation(reservation);
     }
 
-    @Override
-    public List<Seat> getSeatsList(int idFlight) {
-        Flight flight=flightDao.getById(idFlight);
-        return seatDao.findByFlight(flight);
-    }
+
     //Selecciona y guarda el asiento
     @Override
     public Seat selectSeat(int row, String column,int idFlight) {
