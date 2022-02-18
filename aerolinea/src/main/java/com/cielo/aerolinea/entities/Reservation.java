@@ -13,7 +13,8 @@ public class Reservation {
     @Column(name = "id_reservation", nullable = false)
     private int idReservation;
 
-    @Column(name = "id_flight")
+    @ManyToOne
+    @JoinColumn(name = "id_flight")
     private Flight flight;
 
     @ManyToOne
