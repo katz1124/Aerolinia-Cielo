@@ -21,7 +21,7 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     //Input validation.
     //If null, not available
     @Override
-    public Reservation validateWithCode(String name, String reservationCode) {
+    public Reservation validateWithCode(String last_name, String reservationCode) {
 
         int id = GetId(reservationCode);
         Reservation reservation = reservationDao.findById(id).orElse(null);
@@ -30,8 +30,8 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
             return null;
         }
 
-        if (reservation.getPassenger().getName().equals(name)) {
-            System.out.println("asd------0000000000000000----------");
+        if (reservation.getPassenger().getLastName().equals(last_name)) {
+
             if(checkAvailability(reservation)){
 
                 return reservation;
