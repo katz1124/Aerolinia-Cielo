@@ -15,6 +15,7 @@ public class Seat {
     private int row;
     private String column;
     private String type;
+    private String status; //available, ocuppied
 
     @ManyToOne
     @JoinColumn(name = "id_flight")

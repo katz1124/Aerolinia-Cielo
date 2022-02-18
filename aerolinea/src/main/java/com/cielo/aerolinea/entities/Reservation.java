@@ -14,7 +14,7 @@ public class Reservation {
     private int idReservation;
 
     @Column(name = "id_flight")
-    private String idFlight;
+    private Flight flight;
 
     @ManyToOne
     @JoinColumn(name = "id_passenger")
