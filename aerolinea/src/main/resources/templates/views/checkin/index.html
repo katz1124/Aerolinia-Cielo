@@ -40,7 +40,7 @@
             flightCodeStartWidth.startsWith("FL-") ? (flightCode.classList.remove("is-invalid") ,flightCode.classList.add("is-valid")) : (flightCode.classList.remove("is-valid") ,flightCode.classList.add("is-invalid"));
 
             if(flightCode !== "" && lastName.value !== "" && flightCodeStartWidth.startsWith("FL-")){
-                window.location.href = "/checkin2/"+lastName+"/"+flightCode;
+                window.location.href = "/checkin2/"+lastName.value+"/"+flightCode.value;
             }
         }
     </script>
