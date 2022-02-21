@@ -67,12 +67,6 @@ public class CheckInController {
 
 
     }
-<<<<<<< HEAD
-    @GetMapping(value = "/checkin/boardingpass")
-    public BoardingPass boardingpass() {
-
-        return seatSelectionService.generateBoardingPass(1,2,"B");
-=======
 
 
     @GetMapping(value = "/checkin/boardingpass/{idFlight}/{idReservation}/{seat}")
@@ -87,6 +81,6 @@ public class CheckInController {
         }else{
             return "/views/ticket/ticket";
         }
->>>>>>> parent of 393e89f (Merge branch 'main' of https://github.com/katz1124/Aerolinia-Cielo)
+
     }
 }
