@@ -46,25 +46,24 @@ public class CheckInController {
 
     }
     */
-
-    @GetMapping(value = "/checkin2/{name}/{code}")
+    @GetMapping("/checkin/{name}/{code}")
     public String checkin2(@PathVariable("name")String name,@PathVariable("code")String code,Model model) {
         Reservation reservation=availableForCheckinService.validateWithCode(name,code);
         if(reservation==null){
-            return null;
-        }
+            return "redirect:/";
+           }
         int flightId=reservation.getFlight().getIdFlight();
         int reservationId=reservation.getIdReservation();
         String passenger= availableForCheckinService.getPassengerName(reservation);
         String flight= availableForCheckinService.getFlightCode(reservation);
         List<Seat> seats=availableForCheckinService.getSeatsList(flightId);
-
+        double rows = Math.ceil(((double) seats.size() / 4));
         model.addAttribute("passenger",passenger);
+        model.addAttribute("rows", (int) Math.round(rows));
         model.addAttribute("flight",flight);
         model.addAttribute("seats",seats);
         model.addAttribute("reservationid",reservationId);
-
-        return "views/planeroom/planeroom";
+        return "/views/planeroom/planeroom";
 
 
     }

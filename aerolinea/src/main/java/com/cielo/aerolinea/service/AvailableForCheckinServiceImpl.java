@@ -31,6 +31,7 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
 
         int id = GetId(reservationCode);
         Reservation reservation = reservationDao.findById(id).orElse(null);
+
         if (reservation == null) {
 
             return null;
@@ -38,8 +39,10 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
 
         if (reservation.getPassenger().getLastName().equals(last_name)) {
 
+            
             if(checkAvailability(reservation)){
 
+                
                 return reservation;
             }
             System.out.println("falla2");
@@ -68,6 +71,7 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     private Boolean checkAvailability(Reservation reservation){
         Flight flight=reservation.getFlight();
         Date departure_time=flight.getDepartureDate();
+
         Date now=new Date();
         long difference_In_Time
                 = departure_time.getTime() - now.getTime();

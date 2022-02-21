@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,16 +10,75 @@
     <link rel="stylesheet" href="planeroom.css">
     <title>Seleccionar Asiento</title>
 </head>
+
+<style>
+    .ticket-information{
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 40rem;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    padding: 10px 10px 0 10px;
+}
+
+.ticket-information > div{
+    margin: 20px 0 20px 0;
+    border-bottom: solid 1px rgb(223, 223, 223);
+}
+
+
+
+.seat, .empty{
+    background: rgb(236, 236, 236);
+}
+
+.seat, .selected, .user-seat, .empty{
+    
+    display: flex;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.corridor{
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seat:hover{
+    cursor: pointer;
+    background: rgb(111, 238, 132);
+}
+
+.user-seat{
+    background: rgb(111, 238, 132);
+}
+
+.selected{
+    background: rgb(109, 159, 239);
+}
+</style>
 <body>
     <div class="container w-100 ">
         <div class="ticket-information">
             <h4>Aerolinea Cielo</h4>
             <div class="d-flex justify-content-center">
-                <h1>Vuelo F1435</h1>
+                <h1 th:text = "${flight}"></h1>
             </div>
             <div class="d-flex justify-content-between">
                 <h5>Pasajero:</h5>
-                <h3 class="mt-1">Fernando Ibarra</h3>
+                <h3 class="mt-1" th:text = "${passenger}"></h3>
             </div>
             <div class="d-flex justify-content-between mt-3" style="align-items: center;">
                 <h5>Asiento</h5>
@@ -32,30 +91,81 @@
         <div class="w-100">
             <div class="d-flex justify-content-center w-100">
                 <div class="corridor"></div>
-                <div class="corridor">1</div>
-                <div class="corridor">2</div>
-                <div class="corridor">Pasillo</div>
-                <div class="corridor">3</div>
-                <div class="corridor">4</div>
-            </div>
-            <div class="d-flex justify-content-center w-100">
                 <div class="corridor">A</div>
-                <div id="seat1" onclick="selectSeat(this.id)" class="seat">A1</div>
-                <div id="seat2" onclick="selectSeat(this.id)" class="selected">A2</div>
-                <div  class="corridor">P</div>
-                <div id="seat3" onclick="selectSeat(this.id)" class="seat">A3</div>
-                <div id="seat4" onclick="selectSeat(this.id)" class="seat">A4</div>
-            </div>
-
-            <div class="d-flex justify-content-center w-100">
                 <div class="corridor">B</div>
-                <div class="seat"></div>
-                <div class="seat"></div>
-                <div class="corridor"></div>
-                <div class="seat"></div>
-                <div class="selected"></div>
+                <div class="corridor">Pasillo</div>
+                <div class="corridor">C</div>
+                <div class="corridor">D</div>
             </div>
-
+           
+            <div class="d-flex justify-content-center w-100" th:each=" i : ${#numbers.sequence(0, rows - 1)}">
+                <div class="corridor" th:text="${i == 0 ? '1' : seats[(i+i*3)].row}"></div>
+                <div th:class = "${
+                    i == 0 && #lists.size(seats) < 0 ?
+                    (seats[0].status =='AVAILABLE' ? 'seat' : 'selected') : (
+                        (i + i * 3) < #lists.size(seats) ? 
+                            (seats[(i + i * 3)].status == 'AVAILABLE' ? 'seat' : 'selected') :
+                            'empty' 
+                    )}" th:id = "${i == 0 && #lists.size(seats) > 0 ?
+                    ('seat' + seats[0].idSeat) : (
+                        (i + i * 3) < #lists.size(seats) ?
+                            ('seat' + seats[(i + i * 3)].idSeat) :
+                            'empty')}"
+                             onclick="selectSeat(this.id)" class="seat" th:text="${i == 0  && #lists.size(seats) > 0 ? 
+                    (seats[0].row + seats[0].column) : 
+                    (( i + i * 3) < #lists.size(seats) ? 
+                        seats[(i + (i * 3))].row + seats[(i + (i * 3))].column
+                    : '' )}"></div>
+                <div th:class = "${
+                    i == 0 && #lists.size(seats) < 1 ?
+                    (seats[1].status =='AVAILABLE' ? 'seat' : 'selected') : (
+                        (i + (i * 4) - (i - 1)) < #lists.size(seats) ? 
+                            (seats[(i + (i * 4) - (i - 1))].status == 'AVAILABLE' ? 'seat' : 'selected') :
+                            'empty' 
+                    )}" th:id = "${i == 0 && #lists.size(seats) > 1 ?
+                    ('seat' + seats[1].idSeat) : (
+                        (i + (i * 4) - (i - 1)) < #lists.size(seats) ?
+                            ('seat' + seats[(i + (i * 4) - (i - 1))].idSeat) :
+                            'empty')}"
+                             onclick="selectSeat(this.id)" class="seat" th:text="${i == 0 && #lists.size(seats) > 1 ? 
+                    (seats[1].row + seats[1].column) : (
+                        (i + (i * 4) - (i - 1)) < #lists.size(seats) ? 
+                            seats[(i + (i * 4) - (i - 1))].row + seats[(i + (i * 4) - (i - 1))].column
+                                : '' )}"></div>
+                <div  class="corridor">P</div>
+                <div th:class = "${
+                    i == 0 && #lists.size(seats) < 2 ?
+                    (seats[2].status =='AVAILABLE' ? 'seat' : 'selected') : (
+                        (i + (i * 4) - (i - 2)) < #lists.size(seats) ? 
+                            (seats[(i + (i * 4) - (i - 2))].status == 'AVAILABLE' ? 'seat' : 'selected') :
+                            'empty' 
+                    )}" th:id = "${i == 0 && #lists.size(seats) > 2 ?
+                    'seat' + seats[2].idSeat : (
+                        (i + (i * 4) - (i - 2)) < #lists.size(seats) ?
+                            'seat' + seats[(i + (i * 4) - (i - 2))].idSeat :
+                            'empty')}"
+                             onclick="selectSeat(this.id)" class="seat" th:text="${i == 0 && #lists.size(seats) > 2 ? 
+                    (seats[2].row + seats[2].column) : 
+                        ((i + (i * 4) - (i - 2)) < #lists.size(seats) ? 
+                            seats[(i + (i * 4) - (i - 2))].row + seats[(i + (i * 4) - (i - 2))].column
+                                : '' )}"></div>
+                <div th:class = "${
+                    i == 0 && #lists.size(seats) < 3 ?
+                    (seats[3].status =='AVAILABLE' ? 'seat' : 'selected') : (
+                        (i + (i * 4) - (i - 3)) < #lists.size(seats) ? 
+                            (seats[(i + (i * 4) - (i - 3))].status == 'AVAILABLE' ? 'seat' : 'selected') :
+                            'empty' 
+                    )}" th:id = "${i == 0 && #lists.size(seats) > 3 ?
+                    'seat' + seats[3].idSeat : (
+                        (i + (i * 4) - (i - 3)) < #lists.size(seats) ?
+                            'seat' + seats[(i + (i * 4) - (i - 3))].idSeat :
+                            'empty')}"
+                             onclick="selectSeat(this.id)" class="seat" th:text="${i == 0  && #lists.size(seats) > 3 ? 
+                    (seats[3].row + seats[3].column) : 
+                        ((i + (i * 4) - (i - 3)) < #lists.size(seats) ? 
+                            seats[(i + (i * 4) - (i - 3))].row + seats[(i + (i * 4) - (i - 3))].column
+                                : '' )}"></div>
+            </div>
         </div>
     </div>
 </body>
