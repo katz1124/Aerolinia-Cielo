@@ -4,6 +4,7 @@ import com.cielo.aerolinea.entities.BoardingPass;
 import com.cielo.aerolinea.entities.Reservation;
 import com.cielo.aerolinea.entities.Seat;
 import com.cielo.aerolinea.service.AvailableForCheckinService;
+import com.cielo.aerolinea.service.EmailService;
 import com.cielo.aerolinea.service.SeatSelectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,8 @@ public class CheckInController {
     AvailableForCheckinService availableForCheckinService;
     @Autowired
     SeatSelectionService seatSelectionService;
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("/")
     public String home()
@@ -68,8 +71,15 @@ public class CheckInController {
 
     }
     @GetMapping(value = "/checkin/boardingpass")
-    public BoardingPass boardingpass() {
+    public String boardingpass() {
 
-        return seatSelectionService.generateBoardingPass(1,2,"B");
+        seatSelectionService.generateBoardingPass(1,2,"B");
+        return "/views/tickets/tickets";
+    }
+
+    @GetMapping(value = "/checkin/mailtest")
+    public void sendSimpleMail() {
+        emailService.send("airlinescielo.boardingpass@gmail.com", "katz1124@hotmail.com", "TEST","Alegrate si vez este mensaje");
+
     }
 }
