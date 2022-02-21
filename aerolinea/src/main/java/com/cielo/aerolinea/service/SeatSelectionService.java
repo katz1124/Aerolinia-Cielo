@@ -14,5 +14,7 @@ public interface SeatSelectionService {
     public BoardingPass generateBoardingPass(Reservation reservation,int row,String column);
     public BoardingPass generateBoardingPass(int reservationId,int row,String column);
     public BoardingPass getBoardingPass(Reservation reservation);
+
+
     public Seat selectSeat(int row,String column,int idFlight);
 }

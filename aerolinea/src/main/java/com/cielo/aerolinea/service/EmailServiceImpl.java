@@ -1,15 +1,21 @@
 package com.cielo.aerolinea.service;
 
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.codec.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
+import java.io.*;
 
 @Service
 public class EmailServiceImpl implements EmailService{
@@ -17,7 +23,13 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Autowired
+    private TemplateEngine templateEngine;
 
+    @Autowired
+    private Context context;
+
+    String urlBase = "http://localhost:8080";
 
     @Override
     public void send(String from, String to, String title, String body) {
@@ -38,7 +50,7 @@ public class EmailServiceImpl implements EmailService{
 
     public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@baeldung.com");
+        message.setFrom("airlinescielo.boardingpass@gmail.com");
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
@@ -66,5 +78,26 @@ public class EmailServiceImpl implements EmailService{
         } catch (MessagingException messageException) {
             throw new RuntimeException(messageException);
         }
+    }
+
+    @Override
+    public ByteArrayOutputStream createPdfAndSend(String templateName) throws IOException, DocumentException {
+        //TemplateXHTML a StringHTML
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML");
+        templateEngine.setTemplateResolver(templateResolver);
+        context.setVariable("name", "Thomas");
+        String html = templateEngine.process("template", context);
+
+        OutputStream outputStream = new FileOutputStream("message.pdf");
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        outputStream.close();
+
+        return null;
     }
 }

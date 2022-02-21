@@ -23,8 +23,6 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
     @Autowired
     FlightDao flightDao;
 
-    @Autowired
-    AvailableForCheckinServiceImpl availableForCheckinServiceImpl;
 
     @Override
     public BoardingPass generateBoardingPass(Reservation reservation, Seat seat) {
@@ -42,7 +40,7 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
         List <Seat> seats=seatDao.findSeatByRowColumn(row,column,reservation.getFlight());
         Seat seat=seats.get(0);
         seat.setStatus("occupied");
-        if(seat.equals(null)){
+        if(seat==null){
             return null;
         }
         seatDao.save(seat);
@@ -72,22 +70,10 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
         Flight flight=flightDao.getById(idFlight);
         List <Seat> seats=seatDao.findSeatByRowColumn(row,column,flight);
         Seat seat=seats.get(0);
-        seat.setStatus("NOT AVAILABLE");
-        if(seat.equals(null)){
+        seat.setStatus("occupied");
+        if(seat==null){
             return null;
         }
         return seatDao.save(seat);
     }
-
-    public int getSeatRow(String seat){
-        char value = seat.charAt(0);
-        return Character.valueOf(value);
-    }
-
-    public String getSeatColumn(String seat){
-        String column;
-        column = String.valueOf(seat.charAt(1));
-        return column;
-    }
-   
 }

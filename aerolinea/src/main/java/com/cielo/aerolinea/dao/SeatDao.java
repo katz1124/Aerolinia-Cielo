@@ -17,5 +17,4 @@ public interface SeatDao extends JpaRepository<Seat,Integer> {
     @Query("SELECT s from Seat s WHERE s.row= ?1 AND s.column= ?2 AND s.flight = ?3")
     public List<Seat> findSeatByRowColumn(Integer row,String column, Flight flight);
 
-
 }
