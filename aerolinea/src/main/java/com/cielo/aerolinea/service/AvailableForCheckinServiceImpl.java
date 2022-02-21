@@ -52,7 +52,7 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     }
 
     //Reservation code to Reservation id convertion
-    private int GetId(String reservationCode) {
+    public int GetId(String reservationCode) {
         //Format: FL-3581
         int id = 0;
         if (reservationCode.length() < 7) {
