@@ -39,25 +39,20 @@ public class CheckInController {
 
         return availableForCheckinService.validateWithCode(name,reservationCode);
     }
-    /*
-    @GetMapping(value = "/checkin2/{name}/{code}")
-    public String checkin2(@PathVariable("name")String name,@PathVariable("code")String code) {
-        Reservation reservation=availableForCheckinService.validateWithCode(name,code);
-        if(reservation==null){
-            return "views/checkin/checkin2";
-        }
-        else{
-            return "views/planeroom/planeroom";
-        }
 
-    }
-    */
+
     @GetMapping("/checkin/{name}/{code}")
     public String checkin2(@PathVariable("name")String name,@PathVariable("code")String code,Model model) {
         Reservation reservation=availableForCheckinService.validateWithCode(name,code);
+
         if(reservation==null){
+            //VISTA ALTERNATIVA "EL BOARDING PASS YA EXISTE"
             return "redirect:/";
            }
+        if(availableForCheckinService.boardingpassExists(reservation)){
+            //VISTA ALTERNATIVA "EL BOARDING PASS YA EXISTE"
+            return "redirect:/";
+        }
         int flightId=reservation.getFlight().getIdFlight();
         int reservationId=reservation.getIdReservation();
         String passenger= availableForCheckinService.getPassengerName(reservation);

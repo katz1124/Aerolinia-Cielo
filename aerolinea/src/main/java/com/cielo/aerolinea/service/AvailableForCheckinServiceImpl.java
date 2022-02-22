@@ -1,12 +1,10 @@
 package com.cielo.aerolinea.service;
 
+import com.cielo.aerolinea.dao.BoardingPassDao;
 import com.cielo.aerolinea.dao.FlightDao;
 import com.cielo.aerolinea.dao.ReservationDao;
 import com.cielo.aerolinea.dao.SeatDao;
-import com.cielo.aerolinea.entities.Flight;
-import com.cielo.aerolinea.entities.Passenger;
-import com.cielo.aerolinea.entities.Reservation;
-import com.cielo.aerolinea.entities.Seat;
+import com.cielo.aerolinea.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +21,9 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     FlightDao flightDao;
     @Autowired
     SeatDao seatDao;
+    @Autowired
+    BoardingPassDao boardingPassDao;
+
 
     //Input validation.
     //If null, not available
@@ -102,6 +103,15 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     public List<Seat> getSeatsList(int idFlight) {
         Flight flight=flightDao.getById(idFlight);
         return seatDao.findByFlight(flight);
+    }
+
+    @Override
+    public Boolean boardingpassExists(Reservation reservation) {
+        BoardingPass boardingPass=boardingPassDao.findByReservation(reservation);
+        if(boardingPass==null){
+            return false;
+        }
+        return true;
     }
 
 
