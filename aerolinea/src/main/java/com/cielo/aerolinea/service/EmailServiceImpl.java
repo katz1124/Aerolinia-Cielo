@@ -114,7 +114,7 @@ public class EmailServiceImpl implements EmailService{
                     = new FileSystemResource(fileOutput);
 
              */
-            helper.addAttachment("BoardingPass", fileOutput);
+            helper.addAttachment("BoardingPass.pdf", fileOutput);
 
             javaMailSender.send(message);
         } catch (MessagingException messageException) {

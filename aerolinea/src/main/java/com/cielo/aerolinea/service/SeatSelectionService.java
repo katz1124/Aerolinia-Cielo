@@ -10,7 +10,7 @@ import java.util.Map;
 //Seat selection and boarding pass generator
 public interface SeatSelectionService {
 
-
+    public Map <String,String> getTicketInfo(int idBoardingPass);
     public BoardingPass generateBoardingPass(int reservationId,int row,String column);
     public BoardingPass getBoardingPass(Reservation reservation);
 

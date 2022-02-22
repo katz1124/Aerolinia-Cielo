@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping
@@ -75,13 +76,28 @@ public class CheckInController {
 
     @ResponseBody
     @GetMapping(value = "/checkin/boardingpass/{idReservation}/{seat}")
-    public String boardingpass(@PathVariable("idReservation") int idReservation, @PathVariable("seat") String seat) {
+    public String boardingpass(@PathVariable("idReservation") int idReservation, @PathVariable("seat") String seat,Model model) {
         int row = Character.getNumericValue(seat.charAt(0));
         String column = String.valueOf(seat.charAt(1));
         BoardingPass boardingPass = seatSelectionService.generateBoardingPass(idReservation,row,column);
+        Map<String,String> ticketData=seatSelectionService.getTicketInfo(boardingPass.getIdBoardingPass());
+        /*
+        ticketData.put("seatNo",seat.getRow()+" "+seat.getColumn());
+        ticketData.put("passengerName", passenger.getName()+" "+passenger.getLastName());
+        ticketData.put("passport",passenger.getPassport());
+        ticketData.put("email", passenger.getEmail());
+        ticketData.put("bGate",gate.getGate());
+        ticketData.put("depart",flight.getDepartureDate()+"");
+        ticketData.put("arrive",flight.getArrivalDate()+"");
+        ticketData.put("emergencyD",seat.getEmergencyNear()?"SI":"NO");
+        ticketData.put("pos",seat.getType());
+        ticketData.put("origin",flight.getOrigin());
+        ticketData.put("destiny",flight.getDestiny());
+        ticketData.put("vuelo","FL-15"+flight.getIdFlight());
+         */
+        model.addAttribute("seatNo",ticketData.get("seatNo"));
+        // .  .   .
         return "hola";
-
-
 
     }
     @GetMapping("/checkin/ticketto")
