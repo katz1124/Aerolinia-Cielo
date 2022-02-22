@@ -56,22 +56,6 @@
     align-items: center;
 }
 
-.emergency-left{
-    border-right: solid 5px rgb(235, 26, 26);
-}
-
-.window-left{
-    border-right: solid 5px rgb(0, 89, 255);
-}
-
-.emergency-right{
-    border-left: solid 5px rgb(235, 26, 26);
-}
-
-.window-right{
-    border-left: solid 5px rgb(0, 89, 255);
-}
-
 .seat:hover{
     cursor: pointer;
     background: rgb(111, 238, 132);
@@ -112,18 +96,10 @@
                 <div class="corridor">Pasillo</div>
                 <div class="corridor">C</div>
                 <div class="corridor">D</div>
-                <div class="corridor"></div>
             </div>
            
             <div class="d-flex justify-content-center w-100" th:each=" i : ${#numbers.sequence(0, rows - 1)}">
-                
-                <div th:class="${i == 0 ? (
-                    seats[0].type  == 'WINDOW' and seats[0].emergencyNear == true ? 'corridor emergency-left' : (seats[0].type  == 'WINDOW' ? 'corridor window-left' : 'corridor')
-                ) : ( 
-                    (i + i * 3) < #lists.size(seats) ? (seats[(i + i * 3)].type == 'WINDOW' and seats[(i + i * 3)].emergencyNear == true ? 'corridor emergency-left' : (seats[(i + i * 3)].type  == 'WINDOW' ? 'corridor window-left' : 'corridor')) : 'corridor'
-                )}" th:text="${i == 0 ? '1' : seats[(i+i*3)].row}"></div>
-                
-
+                <div class="corridor" th:text="${i == 0 ? '1' : seats[(i+i*3)].row}"></div>
                 <div th:class = "${
                     i == 0 && #lists.size(seats) < 0 ?
                     (seats[0].status =='AVAILABLE' ? 'seat' : 'selected') : (
@@ -189,37 +165,19 @@
                         ((i + (i * 4) - (i - 3)) < #lists.size(seats) ? 
                             seats[(i + (i * 4) - (i - 3))].row + seats[(i + (i * 4) - (i - 3))].column
                                 : '' )}"></div>
-            
-                <div th:class ="${ i == 0 and #lists.size(seats) > 3 ? (
-                    seats[3].emergencyNear == true ? 'corridor emergency-right' : 'corridor window-right'
-                ) : (
-                    (i + (i * 4) - (i - 3)) < #lists.size(seats) ?
-                    (seats[(i + (i * 4) - (i - 3))].emergencyNear == true ? 'corridor emergency-right' : 'corridor window-right' ) : 'corridor'
-                )}"></div>
             </div>
         </div>
     </div>
 </body>
 
 <footer>
-
-    <script th:inline ="javascript">
-
+    <script>
         function saveSeat(){
-            let seat = document.getElementById("ticket");
-            if(seat.innerHTML === ""){
-                alert("Debe elegir un asiento");
-            }else{
-                let idReservation = /*[[${reservationid}]]*/ "";
-                let idFlight = /*[[${flight}]]*/"";
-                let passenger = /*[[${passenger}]]*/"";
-                window.location.href = "/checkin/boardingpass/"+idFlight+"/"+idReservation+"/"+seat.innerHTML+"/"+passenger;
+            let ticket = document.getElementById("ticket");
+            if(ticket.innerHTML === ""){
+                alert("Debe elegir un asiento")
             }
         }
-
-    </script>
-    <script>
-        
         function selectSeat(id){
            let seat = document.getElementById(id);
            
