@@ -34,6 +34,13 @@ public class CheckInController {
         return "views/checkin/index";
     }
 
+    @GetMapping("/{message}")
+    public String homeWithMessage(@PathVariable("message") boolean message, Model model)
+    {
+        model.addAttribute("message", message);
+        return "views/checkin/index";
+    }
+
     @GetMapping(value = "/checkin", params = {"name","reservationCode"})
     public Reservation checkin(@RequestParam String name , @RequestParam String reservationCode) {
 
@@ -47,11 +54,11 @@ public class CheckInController {
 
         if(reservation==null){
             //VISTA ALTERNATIVA "EL BOARDING PASS YA EXISTE"
-            return "redirect:/";
+            return "redirect:/true";
            }
         if(availableForCheckinService.boardingpassExists(reservation)){
             //VISTA ALTERNATIVA "EL BOARDING PASS YA EXISTE"
-            return "redirect:/";
+            return "redirect:/true";
         }
         int flightId=reservation.getFlight().getIdFlight();
         int reservationId=reservation.getIdReservation();

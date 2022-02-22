@@ -22,9 +22,48 @@
     .card{
         background: rgba(255,255,255,0.5);
     }
+
+    .message{
+        display: none;
+        width: 100%;
+        height: 100%;
+        min-height: 50rem;
+        background: rgba(0,0,0,0.7);
+        position: fixed;
+        z-index: 100;
+        top: 0;
+    }
+
+    .msg-body{
+        width: 25rem;
+        min-height: 10rem;
+        background: white;
+        margin: 0 auto;
+        margin-top: 10rem;
+        text-align: center;
+    }
+
+    .show-msg{
+        display: block;
+    }
+
+    .hide-msg{
+        display: none;
+    }
+
     </style>
 </head>
 <body>
+    <div id="message" th:class="'message ' + ${message != null ? 'show-msg' : 'hide-msg'}" >
+        
+        <div class="msg-body">
+            <p class="pt-5 pb-4">
+                ¡Ya se ha seleccionado un haciento, Feliz Viaje!
+            </p>
+            <button class="btn btn-primary mb-2" onclick="hideMsg()">Aceptar</button>
+        </div>
+    </div>
+
     <div class="container mt-3" style="padding-top: 3rem;">
         <div class="card" style="margin:0 auto;width: 30rem; min-height: 25rem;background: rgba(255,255,255,1); text-align: center;">
             <h5 class="card-title mt-3">Consultar vuelo</h5>
@@ -44,6 +83,13 @@
 
 <footer>
     <script>
+
+        function hideMsg(){
+            let message = document.getElementById("message");
+            message.classList.remove("show-msg");
+            message.classList.add("hide-msg");
+        }
+
         function query(){
             let flightCode = document.getElementById("flightCode");
             flightCode.value === "" ?  (flightCode.classList.remove("is-valid"), flightCode.classList.add("is-invalid")) : (flightCode.classList.remove("is-invalid") ,flightCode.classList.add("is-valid"));
