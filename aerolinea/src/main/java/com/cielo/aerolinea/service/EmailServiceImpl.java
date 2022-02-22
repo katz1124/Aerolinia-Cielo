@@ -34,6 +34,13 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     private BoardingPassDao boardingPassDao;
 
+    @Autowired
+    ClassLoaderTemplateResolver templateResolver;
+
+
+
+
+
 
     @Override
     public Map <String,String> generateTicket(int idBoardingPass) throws DocumentException, IOException {
@@ -57,7 +64,9 @@ public class EmailServiceImpl implements EmailService{
         ticketData.put("arrive",flight.getArrivalDate()+"");
         ticketData.put("emergencyD",seat.getEmergencyNear()?"SI":"NO");
         ticketData.put("pos",seat.getType());
-        ticketData.put("origenDest",flight.getOrigin()+" - "+flight.getDestiny());
+        ticketData.put("origin",flight.getOrigin());
+        ticketData.put("destiny",flight.getDestiny());
+        ticketData.put("flight","FL-15"+flight.getIdFlight());
 
         createPdfAndSend("ticket",ticketData);
 
@@ -125,12 +134,15 @@ public class EmailServiceImpl implements EmailService{
     @Override
     public void createPdfAndSend(String templateName,Map <String,String> ticketData) throws IOException, DocumentException {
         //TemplateXHTML to StringHTML
+        /*
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML5");
-        templateEngine.setTemplateResolver(templateResolver);
-        Context context = new Context();
+
+         */
+
+        Context context=new Context();
         context.setVariable("seatNo",ticketData.get("seatNo"));
         context.setVariable("passengerName",ticketData.get("passengerName"));
         context.setVariable("passport",ticketData.get("passport"));
@@ -140,7 +152,9 @@ public class EmailServiceImpl implements EmailService{
         context.setVariable("arrive",ticketData.get("arrive"));
         context.setVariable("emergencyD",ticketData.get("emergencyD"));
         context.setVariable("pos",ticketData.get("pos"));
-        context.setVariable("origenDest",ticketData.get("origenDest"));
+        context.setVariable("origin",ticketData.get("origin"));
+        context.setVariable("destiny",ticketData.get("destiny"));
+        context.setVariable("flight",ticketData.get("flight"));
 
         String html = templateEngine.process(templateName, context);
         //StringHTML to pdf file
@@ -152,7 +166,7 @@ public class EmailServiceImpl implements EmailService{
         renderer.createPDF(outputStream);
         outputStream.close();
         //Send the pdf through mail
-        String text="Estimado pasajero"+ticketData.get("passengerName") +", se adjunta el boarding-pass para su sig vuelo." +"\n\nAgradecemos su preferencia" +"\n\nAerolinia Cielo";
+        String text="Estimado pasajero "+ticketData.get("passengerName") +", se adjunta el boarding-pass para su sig vuelo." +"\n\nAgradecemos su preferencia" +"\n\nAerolinia Cielo";
         //Mandar el mail
         sendMessageWithAttachment(ticketData.get("email"), text, file);
 

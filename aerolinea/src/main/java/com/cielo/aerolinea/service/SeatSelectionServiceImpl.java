@@ -59,7 +59,7 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
         Reservation reservation=reservationDao.getById(reservationId);
 
         Seat seat=seatDao.findSeatByRowColumn(row,column,reservation.getFlight());
-        seat.setStatus("occupied");
+        seat.setStatus("OCCUPIED");
         if(seat==null){
             return null;
         }
