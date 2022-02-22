@@ -4,12 +4,15 @@ import com.cielo.aerolinea.entities.BoardingPass;
 import com.cielo.aerolinea.entities.Reservation;
 import com.cielo.aerolinea.entities.Seat;
 import com.cielo.aerolinea.service.AvailableForCheckinService;
+import com.cielo.aerolinea.service.EmailService;
 import com.cielo.aerolinea.service.SeatSelectionService;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,8 @@ public class CheckInController {
     AvailableForCheckinService availableForCheckinService;
     @Autowired
     SeatSelectionService seatSelectionService;
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("/")
     public String home()
@@ -69,18 +74,23 @@ public class CheckInController {
     }
 
 
-    @GetMapping(value = "/checkin/boardingpass/{idFlight}/{idReservation}/{seat}")
-    public String boardingpass(@PathVariable("idFlight") int idFlight, @PathVariable("idReservation") int idReservation, @PathVariable("seat") String seat) {
-        int row = Character.valueOf(seat.charAt(0));
+    @GetMapping(value = "/checkin/boardingpass/{idReservation}/{seat}")
+    public String boardingpass(@PathVariable("idReservation") int idReservation, @PathVariable("seat") String seat) {
+        int row = Character.getNumericValue(seat.charAt(0));
         String column = String.valueOf(seat.charAt(1));
-        seatSelectionService.selectSeat(row, column, idFlight);
         BoardingPass boardingPass = seatSelectionService.generateBoardingPass(idReservation,row,column);
         
-        if(boardingPass.equals(null)){
+        if(boardingPass==null){
+
             return "redirect: /";
-        }else{
+        }else{ System.out.println("00000000000000000000000000000000000000000000000000");
             return "/views/ticket/ticket";
         }
 
+    }
+    @GetMapping("/checkin/ticketto")
+    public String sendTicket() throws DocumentException, IOException {
+        emailService.generateTicket(1);
+        return "asd";
     }
 }

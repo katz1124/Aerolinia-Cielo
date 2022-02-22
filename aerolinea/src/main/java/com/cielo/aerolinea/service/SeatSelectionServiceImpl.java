@@ -24,39 +24,26 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
     FlightDao flightDao;
 
 
-    @Override
-    public BoardingPass generateBoardingPass(Reservation reservation, Seat seat) {
-        BoardingPass boardingPass= new BoardingPass();
 
-        boardingPass.setSeat(seat);
-        boardingPass.setReservation(reservation);
-
-        return  boardingPassDao.save(boardingPass);
-    }
 
     @Override
-    public BoardingPass generateBoardingPass(Reservation reservation, int row, String column) {
+    public BoardingPass generateBoardingPass(int reservationId, int row, String column) {
+        Reservation reservation=reservationDao.getById(reservationId);
 
-        List <Seat> seats=seatDao.findSeatByRowColumn(row,column,reservation.getFlight());
-        Seat seat=seats.get(0);
+        Seat seat=seatDao.findSeatByRowColumn(row,column,reservation.getFlight());
         seat.setStatus("occupied");
         if(seat==null){
             return null;
         }
         seatDao.save(seat);
         BoardingPass boardingPass= new BoardingPass();
-
         boardingPass.setSeat(seat);
         boardingPass.setReservation(reservation);
 
         return  boardingPassDao.save(boardingPass);
     }
 
-    @Override
-    public BoardingPass generateBoardingPass(int reservationId, int row, String column) {
-        Reservation reservation=reservationDao.getById(reservationId);
-        return generateBoardingPass(reservation,row,column);
-    }
+
 
     @Override
     public BoardingPass getBoardingPass(Reservation reservation) {
@@ -64,16 +51,5 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
     }
 
 
-    //Selecciona y guarda el asiento
-    @Override
-    public Seat selectSeat(int row, String column,int idFlight) {
-        Flight flight=flightDao.getById(idFlight);
-        List <Seat> seats=seatDao.findSeatByRowColumn(row,column,flight);
-        Seat seat=seats.get(0);
-        seat.setStatus("occupied");
-        if(seat==null){
-            return null;
-        }
-        return seatDao.save(seat);
-    }
+
 }

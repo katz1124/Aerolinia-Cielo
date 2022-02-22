@@ -11,6 +11,7 @@ import java.util.Date;
 public class Flight {
     @Id
     @Column(name = "id_flight", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFlight;
 
     private String origin;

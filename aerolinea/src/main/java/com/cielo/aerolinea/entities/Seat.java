@@ -10,11 +10,15 @@ import javax.persistence.*;
 public class Seat {
     @Id
     @Column(name = "id_seat", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idSeat;
-
+    @Column(name = "[row]")
     private int row;
+    @Column(name = "[column]")
     private String column;
+    @Column(name = "[type]")
     private String type;
+    @Column(name = "[status]")
     private String status; //available, ocuppied
 
     @ManyToOne

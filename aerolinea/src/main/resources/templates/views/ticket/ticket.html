@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,21 +29,21 @@
                         <div class="d-flex w-100">
                             <div class="d-block w-50">
                                 <label for="">Puerta abordaje</label>
-                                <h4>A1</h4>
+                                <h4 th:text="${bGate}"></h4>
                             </div>
                             <div class="d-block w-50">
                                 <label for="">Asiento</label>
-                                <h4>A1</h4>
+                                <h4 th:text="${seatNo}"></h4>
                             </div>
                         </div>
                         <div class="d-flex w-100 mt-3">
                             <div class="d-block w-50">
-                                <label for="">Asiento</label>
-                                <h4>5A</h4>
+                                <label for="">Puerta Emergencia</label>
+                                <h4 th:text="${emergencyD}"></h4>
                             </div>
                             <div class="d-block w-50">
-                                <label for="">Clase</label>
-                                <h4>Turista</h4>
+                                <label for="">Pos</label>
+                                <h4 th:text="${pos}"></h4>
                             </div>
                         </div>
                     </div>
@@ -51,24 +52,17 @@
                     <div style="text-align: center;">
                         <div class="d-flex w-100">
                             <div class="d-block w-50">
-                                <label for="">Abordaje</label>
-                                <h4>11:45</h4>
-                            </div>
-                            <div class="d-block w-50">
                                 <label for="">Salida</label>
-                                <h4>12:00</h4>
+                                <h4 th:text="${depart}"></h4>
                             </div>
                         </div>
                         <div class="d-flex w-100 mt-3">
                             <div class="d-block w-50">
-                                <label for="">Duracion</label>
-                                <h4>5:43 H</h4>
-                            </div>
-                            <div class="d-block w-50">
                                 <label for="">Llegada</label>
-                                <h4>17:43</h4>
+                                <h4 th:text="${arrive}"></h4>
                             </div>
                         </div>
+
                 </div>
             </div>
         </div>
@@ -76,11 +70,11 @@
             <div class="w-75 m-3">
                 <div class="">
                     <label for="">Pasajero</label>
-                    <h5>Fernando Ibarra</h5>
+                    <h5 th:text="${passengerName}"></h5>
                 </div>
                 <div>
-                    <label for="">Fecha</label>
-                    <h5>Mañana mismo</h5>
+                    <label for="">Origen/Destino</label>
+                    <h5 th:text="${origenDest}"></h5>
                 </div>
             </div>
             <div class="w-25 m-2">

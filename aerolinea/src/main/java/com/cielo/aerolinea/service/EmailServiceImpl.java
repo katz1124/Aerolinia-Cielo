@@ -1,8 +1,10 @@
 package com.cielo.aerolinea.service;
 
+import com.cielo.aerolinea.dao.BoardingPassDao;
+import com.cielo.aerolinea.entities.*;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.codec.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,6 +18,8 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class EmailServiceImpl implements EmailService{
@@ -26,10 +30,46 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Autowired
-    private Context context;
 
-    String urlBase = "http://localhost:8080";
+    @Autowired
+    private BoardingPassDao boardingPassDao;
+
+
+    @Override
+    public Map <String,String> generateTicket(int idBoardingPass) throws DocumentException, IOException {
+        //Carga de todas las clases necesarias
+        BoardingPass boardingPass=boardingPassDao.findById(idBoardingPass).orElse(null);
+        Reservation reservation=boardingPass.getReservation();
+        Seat seat= boardingPass.getSeat();
+        Flight flight=reservation.getFlight();
+        Passenger passenger=reservation.getPassenger();
+        BoardingGate gate= flight.getBoardingGate();
+
+        Map <String,String> ticketData= new HashMap<String,String>();
+
+        //Sumary
+        ticketData.put("seatNo",seat.getRow()+" "+seat.getColumn());
+        ticketData.put("passengerName", passenger.getName()+" "+passenger.getLastName());
+        ticketData.put("passport",passenger.getPassport());
+        ticketData.put("email", passenger.getEmail());
+        ticketData.put("bGate",gate.getGate());
+        ticketData.put("depart",flight.getDepartureDate()+"");
+        ticketData.put("arrive",flight.getArrivalDate()+"");
+        ticketData.put("emergencyD",seat.getEmergencyNear()?"SI":"NO");
+        ticketData.put("pos",seat.getType());
+        ticketData.put("origenDest",flight.getOrigin()+" - "+flight.getDestiny());
+
+        createPdfAndSend("/views/ticket/ticket",ticketData);
+
+
+
+        return ticketData;
+
+    }
+
+
+
+
 
     @Override
     public void send(String from, String to, String title, String body) {
@@ -59,7 +99,7 @@ public class EmailServiceImpl implements EmailService{
     }
 
     @Override
-    public void sendMessageWithAttachment(String to, String subject, String text, String pathToAttachment) {
+    public void sendMessageWithAttachment(String to, String text, File fileOutput) {
         MimeMessage message = javaMailSender.createMimeMessage();
 
 
@@ -67,12 +107,14 @@ public class EmailServiceImpl implements EmailService{
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom("airlinescielo.boardingpass@gmail.com");
             helper.setTo(to);
-            helper.setSubject(subject);
+            helper.setSubject("Cielo BoardingPass");
             helper.setText(text);
-
+            /*
             FileSystemResource file
-                    = new FileSystemResource(new File(pathToAttachment));
-            helper.addAttachment("Invoice", file);
+                    = new FileSystemResource(fileOutput);
+
+             */
+            helper.addAttachment("BoardingPass", fileOutput);
 
             javaMailSender.send(message);
         } catch (MessagingException messageException) {
@@ -81,23 +123,40 @@ public class EmailServiceImpl implements EmailService{
     }
 
     @Override
-    public ByteArrayOutputStream createPdfAndSend(String templateName) throws IOException, DocumentException {
-        //TemplateXHTML a StringHTML
+    public void createPdfAndSend(String templateName,Map <String,String> ticketData) throws IOException, DocumentException {
+        //TemplateXHTML to StringHTML
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
         templateEngine.setTemplateResolver(templateResolver);
-        context.setVariable("name", "Thomas");
-        String html = templateEngine.process("template", context);
+        Context context = new Context();
+        context.setVariable("seatNo",ticketData.get("seatNo"));
+        context.setVariable("passengerName",ticketData.get("passengerName"));
+        context.setVariable("passport",ticketData.get("passport"));
+        context.setVariable("email", ticketData.get("email"));
+        context.setVariable("bGate",ticketData.get("bGate"));
+        context.setVariable("depart",ticketData.get("depart"));
+        context.setVariable("arrive",ticketData.get("arrive"));
+        context.setVariable("emergencyD",ticketData.get("emergencyD"));
+        context.setVariable("pos",ticketData.get("pos"));
+        context.setVariable("origenDest",ticketData.get("origenDest"));
 
-        OutputStream outputStream = new FileOutputStream("message.pdf");
+        String html = templateEngine.process(templateName, context);
+        //StringHTML to pdf file
+        File file = new File("ticket.pdf");
+        OutputStream outputStream = new FileOutputStream(file);
         ITextRenderer renderer = new ITextRenderer();
         renderer.setDocumentFromString(html);
         renderer.layout();
         renderer.createPDF(outputStream);
-
         outputStream.close();
+        //Send the pdf through mail
+        String text="Estimado pasajero"+ticketData.get("passengerName") +", se adjunta el boarding-pass para su sig vuelo." +"\n\nAgradecemos su preferencia" +"\n\nAerolinia Cielo";
+        //Mandar el mail
+        sendMessageWithAttachment(ticketData.get("email"), text, file);
 
-        return null;
+
     }
+
+
 }

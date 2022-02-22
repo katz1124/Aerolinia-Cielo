@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class BoardingPass {
     @Id
     @Column(name = "id_boarding_pass", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idBoardingPass;
 
     @JoinColumn(name = "id_seat")

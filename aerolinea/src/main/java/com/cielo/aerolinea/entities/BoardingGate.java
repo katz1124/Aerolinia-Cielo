@@ -2,10 +2,7 @@ package com.cielo.aerolinea.entities;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -13,6 +10,7 @@ import javax.persistence.Table;
 public class BoardingGate {
     @Id
     @Column(name = "id_boarding_gate", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idBoardingGate;
 
     private String gate;

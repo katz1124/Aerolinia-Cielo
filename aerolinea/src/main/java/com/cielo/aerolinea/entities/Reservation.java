@@ -11,6 +11,7 @@ import java.util.Date;
 public class Reservation {
     @Id
     @Column(name = "id_reservation", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idReservation;
 
     @ManyToOne

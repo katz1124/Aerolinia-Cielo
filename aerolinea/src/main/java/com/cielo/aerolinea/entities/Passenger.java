@@ -15,6 +15,7 @@ public class Passenger implements Serializable{
 
     @Id
     @Column(name = "id_passenger", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPassenger;
     @Column
     private String passport;
