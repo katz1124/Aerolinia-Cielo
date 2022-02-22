@@ -100,7 +100,7 @@ public class CheckInController {
     }
     @GetMapping("/checkin/send/email/{idBoardingPass}")
     public String sendTicket(@PathVariable("idBoardingPass") int idBoardingPass) throws DocumentException, IOException {
-        //emailService.generateTicket(1);
+        emailService.generateTicket(idBoardingPass);
         
         return "redirect:/";
     }
