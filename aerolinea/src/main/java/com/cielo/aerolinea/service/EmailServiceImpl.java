@@ -59,7 +59,7 @@ public class EmailServiceImpl implements EmailService{
         ticketData.put("pos",seat.getType());
         ticketData.put("origenDest",flight.getOrigin()+" - "+flight.getDestiny());
 
-        createPdfAndSend("/views/ticket/ticket",ticketData);
+        createPdfAndSend("ticket",ticketData);
 
 
 
@@ -126,8 +126,9 @@ public class EmailServiceImpl implements EmailService{
     public void createPdfAndSend(String templateName,Map <String,String> ticketData) throws IOException, DocumentException {
         //TemplateXHTML to StringHTML
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("/templates/");
         templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML");
+        templateResolver.setTemplateMode("HTML5");
         templateEngine.setTemplateResolver(templateResolver);
         Context context = new Context();
         context.setVariable("seatNo",ticketData.get("seatNo"));

@@ -73,22 +73,19 @@ public class CheckInController {
 
     }
 
-
+    @ResponseBody
     @GetMapping(value = "/checkin/boardingpass/{idReservation}/{seat}")
     public String boardingpass(@PathVariable("idReservation") int idReservation, @PathVariable("seat") String seat) {
         int row = Character.getNumericValue(seat.charAt(0));
         String column = String.valueOf(seat.charAt(1));
         BoardingPass boardingPass = seatSelectionService.generateBoardingPass(idReservation,row,column);
-        
-        if(boardingPass==null){
+        return "hola";
 
-            return "redirect: /";
-        }else{ System.out.println("00000000000000000000000000000000000000000000000000");
-            return "/views/ticket/ticket";
-        }
+
 
     }
     @GetMapping("/checkin/ticketto")
+    @ResponseBody
     public String sendTicket() throws DocumentException, IOException {
         emailService.generateTicket(1);
         return "asd";
