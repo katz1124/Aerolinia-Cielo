@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/9b60a7c614.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="ticket.css">
-    <link href="ticket.css" th:href="@{ticket.css}" rel="stylesheet" />
 </head>
 <body>
     <div class="container">
@@ -30,21 +28,21 @@
                         <div class="d-flex w-100">
                             <div class="d-block w-50">
                                 <label for="">Puerta abordaje</label>
-                                <h4 th:text="${bGate}"></h4>
+                                <h4>A1</h4>
                             </div>
                             <div class="d-block w-50">
                                 <label for="">Asiento</label>
-                                <h4 th:text="${seatNo}"></h4>
+                                <h4>A1</h4>
                             </div>
                         </div>
                         <div class="d-flex w-100 mt-3">
                             <div class="d-block w-50">
-                                <label for="">Puerta Emergencia</label>
-                                <h4 th:text="${emergencyD}"></h4>
+                                <label for="">Asiento</label>
+                                <h4>5A</h4>
                             </div>
                             <div class="d-block w-50">
-                                <label for="">Pos</label>
-                                <h4 th:text="${pos}"></h4>
+                                <label for="">Clase</label>
+                                <h4>Turista</h4>
                             </div>
                         </div>
                     </div>
@@ -53,33 +51,40 @@
                     <div style="text-align: center;">
                         <div class="d-flex w-100">
                             <div class="d-block w-50">
+                                <label for="">Abordaje</label>
+                                <h4>11:45</h4>
+                            </div>
+                            <div class="d-block w-50">
                                 <label for="">Salida</label>
-                                <h4 th:text="${depart}"></h4>
+                                <h4>12:00</h4>
                             </div>
                         </div>
                         <div class="d-flex w-100 mt-3">
                             <div class="d-block w-50">
+                                <label for="">Duracion</label>
+                                <h4>5:43 H</h4>
+                            </div>
+                            <div class="d-block w-50">
                                 <label for="">Llegada</label>
-                                <h4 th:text="${arrive}"></h4>
+                                <h4>17:43</h4>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
-            <div class="w-100 d-flex">
-                <div class="w-75 m-3">
-                    <div class="">
-                        <label for="">Pasajero</label>
-                        <h5 th:text="${passengerName}"></h5>
-                    </div>
-                    <div>
-                        <label for="">Origen/Destino</label>
-                        <h5 th:text="${origenDest}"></h5>
-                    </div>
+        </div>
+        <div class="w-100 d-flex">
+            <div class="w-75 m-3">
+                <div class="">
+                    <label for="">Pasajero</label>
+                    <h5>Fernando Ibarra</h5>
                 </div>
-                <div class="w-25 m-2">
-                    <img width="128" height="128" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Codigo_QR.svg/1200px-Codigo_QR.svg.png" alt="">
+                <div>
+                    <label for="">Fecha</label>
+                    <h5>Mañana mismo</h5>
                 </div>
+            </div>
+            <div class="w-25 m-2">
+                <img width="128" height="128" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Codigo_QR.svg/1200px-Codigo_QR.svg.png" alt="">
             </div>
         </div>
     </div>
