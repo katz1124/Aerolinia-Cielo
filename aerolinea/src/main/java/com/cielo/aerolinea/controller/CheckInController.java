@@ -74,36 +74,34 @@ public class CheckInController {
 
     }
 
-    @ResponseBody
+    //@ResponseBody
     @GetMapping(value = "/checkin/boardingpass/{idReservation}/{seat}")
     public String boardingpass(@PathVariable("idReservation") int idReservation, @PathVariable("seat") String seat,Model model) {
         int row = Character.getNumericValue(seat.charAt(0));
         String column = String.valueOf(seat.charAt(1));
         BoardingPass boardingPass = seatSelectionService.generateBoardingPass(idReservation,row,column);
         Map<String,String> ticketData=seatSelectionService.getTicketInfo(boardingPass.getIdBoardingPass());
-        /*
-        ticketData.put("seatNo",seat.getRow()+" "+seat.getColumn());
-        ticketData.put("passengerName", passenger.getName()+" "+passenger.getLastName());
-        ticketData.put("passport",passenger.getPassport());
-        ticketData.put("email", passenger.getEmail());
-        ticketData.put("bGate",gate.getGate());
-        ticketData.put("depart",flight.getDepartureDate()+"");
-        ticketData.put("arrive",flight.getArrivalDate()+"");
-        ticketData.put("emergencyD",seat.getEmergencyNear()?"SI":"NO");
-        ticketData.put("pos",seat.getType());
-        ticketData.put("origin",flight.getOrigin());
-        ticketData.put("destiny",flight.getDestiny());
-        ticketData.put("vuelo","FL-15"+flight.getIdFlight());
-         */
+       
         model.addAttribute("seatNo",ticketData.get("seatNo"));
-        // .  .   .
-        return "hola";
+        model.addAttribute("flight", ticketData.get("vuelo"));
+        model.addAttribute("boardingGate", ticketData.get("bGate"));
+        model.addAttribute("departure", ticketData.get("depart"));
+        model.addAttribute("arrive", ticketData.get("arrive"));
+        model.addAttribute("passengerName", ticketData.get("passengerName"));
+        model.addAttribute("origin", ticketData.get("origin"));
+        model.addAttribute("destiny", ticketData.get("destiny"));
+        model.addAttribute("seatType", ticketData.get("pos"));
+        model.addAttribute("emergency", ticketData.get("emergencyD"));
+        model.addAttribute("passport", ticketData.get("passport"));
+        model.addAttribute("idBoardingPass", boardingPass.getIdBoardingPass());
+
+        return "/views/ticket/ticket";
 
     }
-    @GetMapping("/checkin/ticketto")
-    @ResponseBody
-    public String sendTicket() throws DocumentException, IOException {
-        emailService.generateTicket(1);
-        return "asd";
+    @GetMapping("/checkin/send/email/{idBoardingPass}")
+    public String sendTicket(@PathVariable("idBoardingPass") int idBoardingPass) throws DocumentException, IOException {
+        //emailService.generateTicket(1);
+        
+        return "redirect:/";
     }
 }
