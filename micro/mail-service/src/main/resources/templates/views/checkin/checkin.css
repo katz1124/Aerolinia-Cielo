@@ -1,0 +1,11 @@
+body{
+    width: 100; 
+    min-height: 50rem;
+    background-image: url('https://wallpaperaccess.com/full/254367.png'); 
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+
+.card{
+    background: rgba(255,255,255,0.5);
+}
