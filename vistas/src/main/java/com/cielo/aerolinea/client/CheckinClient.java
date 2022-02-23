@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
 
-@FeignClient(name ="checkin-service")
-@RequestMapping(value = "/checkin" )
+@FeignClient(name ="checkin-service" ,url="localhost:8081")
 public interface CheckinClient {
 
         //CHECKIN-SERVICE

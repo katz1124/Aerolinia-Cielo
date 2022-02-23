@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(value = "/checkinService")
 public class CheckInController {
 
     @Autowired

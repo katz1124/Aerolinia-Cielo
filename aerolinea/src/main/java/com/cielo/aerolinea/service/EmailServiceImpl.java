@@ -134,13 +134,7 @@ public class EmailServiceImpl implements EmailService{
     @Override
     public void createPdfAndSend(String templateName,Map <String,String> ticketData) throws IOException, DocumentException {
         //TemplateXHTML to StringHTML
-        /*
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("/templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML5");
 
-         */
 
         Context context=new Context();
         context.setVariable("seatNo",ticketData.get("seatNo"));
