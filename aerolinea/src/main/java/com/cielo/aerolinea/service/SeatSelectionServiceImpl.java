@@ -5,6 +5,7 @@ import com.cielo.aerolinea.dao.FlightDao;
 import com.cielo.aerolinea.dao.ReservationDao;
 import com.cielo.aerolinea.dao.SeatDao;
 import com.cielo.aerolinea.entities.*;
+import com.cielo.aerolinea.model.SeatSelectionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,15 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
     SeatDao seatDao;
 
 
+    @Override
+    public SeatSelectionModel getSeatSelectionModel(int reservationId, int row, String column) {
+        SeatSelectionModel seatSelectionModel=new SeatSelectionModel();
+        BoardingPass boardingPass=generateBoardingPass(reservationId,row,column);
+        seatSelectionModel.setBoardingPass(boardingPass);
+        seatSelectionModel.setTicketData(getTicketInfo(boardingPass.getIdBoardingPass()));
 
-
+        return  seatSelectionModel;
+    }
 
     @Override
     public Map<String, String> getTicketInfo(int idBoardingPass) {
@@ -78,6 +86,22 @@ public class SeatSelectionServiceImpl implements  SeatSelectionService{
         return boardingPassDao.findByReservation(reservation);
     }
 
+
+
+    @Override
+    public Boolean boardingpassExists(int idReservation) {
+        Reservation reservation=reservationDao.getById(idReservation);
+        BoardingPass boardingPass=boardingPassDao.findByReservation(reservation);
+        if(boardingPass==null){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Integer getRows(int idReservation) {
+        return null;
+    }
 
 
 }

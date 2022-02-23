@@ -5,12 +5,11 @@ import com.cielo.aerolinea.dao.FlightDao;
 import com.cielo.aerolinea.dao.ReservationDao;
 import com.cielo.aerolinea.dao.SeatDao;
 import com.cielo.aerolinea.entities.*;
+import com.cielo.aerolinea.model.CheckinModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -25,36 +24,38 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
     BoardingPassDao boardingPassDao;
 
 
-    //Input validation.
-    //If null, not available
-    @Override
-    public Reservation validateWithCode(String last_name, String reservationCode) {
 
+    @Override
+    public CheckinModel validateWithCode(String last_name, String reservationCode) {
+        CheckinModel checkinModel = new CheckinModel();
         int id = GetId(reservationCode);
         Reservation reservation = reservationDao.findById(id).orElse(null);
-
+        checkinModel.setReservation(reservation);
+        Flight flight=reservation.getFlight();
         if (reservation == null) {
-
             return null;
+        }
+        if (boardingPassDao.findByReservation(reservation)!=null){
+            checkinModel.setBoardingpassExist(true);
+            return checkinModel;
         }
 
         if (reservation.getPassenger().getLastName().equals(last_name)) {
-
-            
             if(checkAvailability(reservation)){
-
-                
-                return reservation;
+                checkinModel.setSeats(getSeatsList(flight.getIdFlight()));
+                checkinModel.setFlightCode(getFlightCode(reservation));
+                checkinModel.setPassenger(getPassengerName(reservation));
+                checkinModel.setReservation(reservation);
+                checkinModel.setBoardingpassExist(false);
+                return checkinModel;
             }
-
         }
-
         return null;
     }
 
     //Reservation code to Reservation id convertion
     private int GetId(String reservationCode) {
-        //Format: FL-3581
+        //Format: RV-3581
         int id = 0;
         if (reservationCode.length() < 7) {
             return 0;
@@ -105,14 +106,6 @@ public class AvailableForCheckinServiceImpl implements AvailableForCheckinServic
         return seatDao.findByFlight(flight);
     }
 
-    @Override
-    public Boolean boardingpassExists(Reservation reservation) {
-        BoardingPass boardingPass=boardingPassDao.findByReservation(reservation);
-        if(boardingPass==null){
-            return false;
-        }
-        return true;
-    }
 
 
 }
